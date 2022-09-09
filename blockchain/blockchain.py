@@ -68,6 +68,7 @@ app = Flask(__name__)
 
 blockchain = Blockchain()
 
+
 @app.route('/mine_block', methods=['GET'])
 def mine_block():
     prev_block = blockchain.get_last_block()
@@ -85,5 +86,12 @@ def get_chain():
         'length': len(blockchain.chain),
     }), http.HTTPStatus.OK
 
-# Run Flask 
+@app.route('/is_valid', methods=['GET'])
+def is_valid():
+    message = 'Blockchain is valid.' if blockchain.is_chain_valid(
+        blockchain.chain) else 'ERROR: Blockchain is invalid!'
+    return jsonify({'message': message}), http.HTTPStatus.OK
+
+
+# Run Flask
 app.run(host='0.0.0.0', port=5432)
